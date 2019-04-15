@@ -1,11 +1,13 @@
 #include "Rangefinder.h"
 #include "Arduino.h"
+#include "NewPing.h"
 
 Rangefinder::Rangefinder(int triggerPin, int echoPin) {
   this -> triggerPin = triggerPin;
   this -> echoPin = echoPin;
   pinMode(this -> triggerPin, OUTPUT);
   pinMode(this -> echoPin, INPUT);
+  NewPing sonar(triggerPin, echoPin, 500);
 }
 
 int Rangefinder::getDistance() {
@@ -15,13 +17,7 @@ int Rangefinder::getDistance() {
 }
 
 int Rangefinder::calcDistance() {
-  digitalWrite(triggerPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(triggerPin, LOW);
-  delayMicroseconds(10);
-  unsigned long pulseTime = pulseIn(echoPin, HIGH);
-  int distance = pulseTime/58;
-  return distance;
+  sonar.ping_in();
 }
 
 void Rangefinder::addToHistory(int distanceValue) {
